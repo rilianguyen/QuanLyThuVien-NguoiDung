@@ -1,0 +1,157 @@
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <windows.h>
+
+#define SIZE 100
+int dangnhap;
+struct NguoiDung
+{
+	char TenDangNhap[10];
+	char MatKhau[10];
+	char HoTen[50];
+	int NamSinh;
+	int CMND[20];
+	char DiaChi[100];
+	int GioiTinh;
+	int TinhTrang;
+};
+
+struct DSNguoiDung
+{
+	int n;
+	NguoiDung dsnd[SIZE];
+};
+
+void Nhap1NguoiDung(NguoiDung &nd)
+{
+	fflush(stdin);
+	printf("\nTen dang nhap: ");
+	gets(nd.TenDangNhap);
+	fflush(stdin);
+	printf("Mat khau: ");
+	gets(nd.MatKhau);
+	fflush(stdin);
+	printf("Ho ten: ");
+	gets(nd.HoTen);
+	printf("Nam sinh: ");
+	scanf("%d", &nd.NamSinh);
+	fflush(stdin);
+	printf("CMND: ");
+	scanf("&d", &nd.CMND);
+	fflush(stdin);
+	printf("Dia chi: ");
+	gets(nd.DiaChi);
+	do
+	{
+		printf("Gioi tinh (Nam = 0, Nu = 1): ");
+		scanf("%d", &nd.GioiTinh);
+		if (!(nd.GioiTinh == 0 || nd.GioiTinh == 1))
+			printf("NHAP LAI GIOI TINH\n");
+	} while (!(nd.GioiTinh == 0 || nd.GioiTinh == 1));
+}
+
+void Xuat1NguoiDung(NguoiDung nd)
+{
+	printf("%s - %s - %s - %d - %d - %s\n", nd.TenDangNhap, nd.MatKhau, nd.HoTen, nd.NamSinh, nd.CMND, nd.DiaChi);
+}
+
+void NhapDSND(DSNguoiDung &_DSNguoiDung)
+{
+	do
+	{
+		printf("Nhap so luong nguoi dung: ");
+		scanf("%d", &_DSNguoiDung.n);
+		if ((_DSNguoiDung.n < 1 || _DSNguoiDung.n > SIZE))
+			printf("NHAP LAI SO LUONG NGUOI DUNG\n");
+	} while ((_DSNguoiDung.n < 1 || _DSNguoiDung.n > SIZE));
+	for (int i = 0; i < _DSNguoiDung.n; i++)
+	{
+		printf("\nNguoi dung thu %d", i + 1);
+		Nhap1NguoiDung(_DSNguoiDung.dsnd[i]);
+	}
+}
+
+void XuatDSND(DSNguoiDung _DSNguoiDung)
+{
+	printf("DANH SACH NGUOI DUNG\n");
+	for (int i = 0; i < _DSNguoiDung.n; i++)
+		Xuat1NguoiDung(_DSNguoiDung.dsnd[i]);
+}
+
+void InputLogin(char TenDangNhap[10], char MatKhau[10])
+{
+	system("cls");
+	fflush(stdin);
+	printf("DANG NHAP\n");
+	printf("Ten dang nhap: ");
+	gets(TenDangNhap);
+	fflush(stdin);
+	printf("Mat khau: ");
+	gets(MatKhau);
+}
+
+int Login(DSNguoiDung _DSNguoiDung, char TenDangNhap[10], char MatKhau[10])
+{
+	for (int i = 0; i < _DSNguoiDung.n; i++)
+	{
+		if (strcmp(_DSNguoiDung.dsnd[i].TenDangNhap, TenDangNhap) == 0
+			&& strcmp(_DSNguoiDung.dsnd[i].MatKhau, MatKhau) == 0)
+			return 1;
+	}
+	return 0;
+}
+
+NguoiDung SearchNguoiDung(DSNguoiDung _DSNguoiDung, char TenDangNhap[10])
+{
+	NguoiDung _NguoiDung;
+	int result = 0;
+	for (int i = 0; i < _DSNguoiDung.n; i++)
+	{
+		if (strcmp(_DSNguoiDung.dsnd[i].TenDangNhap, TenDangNhap) == 0)
+		{
+			result = 1;
+			_NguoiDung = _DSNguoiDung.dsnd[i];
+		}	
+	}
+	if (result == 1)
+		return _NguoiDung;
+}
+
+void Logout(int dangxuat)
+{
+	if (dangxuat == 1)
+	{
+		printf("Dang xuat thanh cong");
+		dangnhap = 0;
+	}
+}
+
+void main()
+{
+	NguoiDung nd;
+	DSNguoiDung _DSNguoiDung;
+	char TenDangNhap[10], MatKhau[10];
+	int dangxuat;
+	
+	NhapDSND(_DSNguoiDung);
+	InputLogin(TenDangNhap, MatKhau);
+	if (Login(_DSNguoiDung, TenDangNhap, MatKhau) == 1)
+	{
+		printf("\nDang nhap thanh cong\n");
+		dangnhap = 1;
+		SearchNguoiDung;
+	}
+	else
+		printf("\nDang nhap that bai\n");
+	do
+	{
+		printf("\nBan co muon dang xuat? (Yes = 1, No = 0): ");
+		scanf("%d", &dangxuat);
+		if (!(dangxuat == 0 || dangxuat == 1))
+			printf("KHONG DUNG CU PHAP. MOI NHAP LAI\n");
+	} while (!(dangxuat== 0 || dangxuat == 1));
+	
+	Logout(dangxuat);
+}
